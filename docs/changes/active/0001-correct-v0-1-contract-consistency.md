@@ -2,7 +2,7 @@
 id: 1
 slug: correct-v0-1-contract-consistency
 title: Correct v0.1 authority and event contract consistency
-status: proposed
+status: in-progress
 priority: high
 type: fix
 created: 2026-08-12
@@ -16,10 +16,11 @@ plan:
 results:
 trivial: false
 auto_groomable:
-branch:
+branch: feat/correct-v0-1-contract-consistency
 pr:
 blocked_by:
 reconciled: false
+claimed_at: 2026-08-12T05:30:36Z
 ---
 
 ## Artifacts
