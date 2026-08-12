@@ -12,7 +12,7 @@ related: []
 discovered_from: []
 adrs: []
 spec: docs/superpowers/specs/2026-08-12-correct-v0-1-contract-consistency-design.md
-plan:
+plan: docs/superpowers/plans/2026-08-12-correct-v0-1-contract-consistency.md
 results:
 trivial: false
 auto_groomable:
@@ -20,7 +20,7 @@ branch: feat/correct-v0-1-contract-consistency
 pr:
 blocked_by:
 reconciled: true
-claimed_at: 2026-08-12T05:32:09Z
+claimed_at: 2026-08-12T05:38:01Z
 ---
 
 ## Artifacts
@@ -29,6 +29,7 @@ claimed_at: 2026-08-12T05:32:09Z
 | Artifact | Link |
 |---|---|
 | Spec | [2026-08-12-correct-v0-1-contract-consistency-design.md](https://github.com/ethanhinson/adp/blob/docket/docs/superpowers/specs/2026-08-12-correct-v0-1-contract-consistency-design.md) |
+| Plan | [2026-08-12-correct-v0-1-contract-consistency.md](https://github.com/ethanhinson/adp/blob/feat/correct-v0-1-contract-consistency/docs/superpowers/plans/2026-08-12-correct-v0-1-contract-consistency.md) |
 <!-- docket:artifacts:end -->
 
 ## Why
