@@ -36,6 +36,9 @@ describe("authority", () => {
     expect(isAuthoritySubset(auth({ network: { mode: "bounded", destinations: ["api.example"] } }), auth({ network: { mode: "none" } }))).toBe(false);
     expect(isAuthoritySubset(auth({ credentials: [{ handle: "secret:b" }] }), auth())).toBe(false);
   });
+  it("does not let an unrestricted credential exceed restricted parent scopes", () => {
+    expect(isAuthoritySubset(auth({ credentials: [{ handle: "secret:a" }] }), auth({ credentials: [{ handle: "secret:a", scopes: ["read"] }] }))).toBe(false);
+  });
   it("can prohibit further delegation", () => {
     const child = intersectAuthority(auth(), auth({ delegation: { allowed: false, maxDepth: 0 } }), auth(), auth());
     expect(child.delegation).toEqual({ allowed: false, maxDepth: 0 }); expect(isAuthoritySubset(child, auth())).toBe(true);
