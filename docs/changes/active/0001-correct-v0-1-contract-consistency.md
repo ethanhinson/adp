@@ -19,8 +19,8 @@ auto_groomable:
 branch: feat/correct-v0-1-contract-consistency
 pr:
 blocked_by:
-reconciled: false
-claimed_at: 2026-08-12T05:30:36Z
+reconciled: true
+claimed_at: 2026-08-12T05:32:09Z
 ---
 
 ## Artifacts
@@ -57,3 +57,7 @@ None. The approved design resolves the reviewed semantics explicitly.
 ## Reconcile log
 
 <!-- Appended by docket-implement-next's reconcile pass: dated entries of what changed. -->
+
+### 2026-08-12
+
+Re-checked the approved design against `main`, the current schemas, reference TypeScript, tests, related and archived changes, and ADRs. The five documented contract defects remain present and no overlapping work, dependencies, or newer architecture decisions alter the scope. The approved spec remains current without modification.
