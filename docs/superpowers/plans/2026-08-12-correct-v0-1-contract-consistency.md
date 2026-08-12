@@ -205,14 +205,7 @@ git add src/types.ts test/types.fixture.ts tsconfig.json
 git commit -m "fix: align public types with schemas"
 ```
 
-### Task 4: Verify the integrated v0.1 correction
-
-**Files:**
-- Modify only files required to fix integration regressions found by the full suite.
-
-**Interfaces:**
-- Consumes: all deliverables from Tasks 1-3.
-- Produces: a release-ready branch that passes the repository's declared verification command.
+## Build Gate Checklist
 
 - [ ] **Step 1: Run formatting-insensitive diff checks**
 
@@ -231,13 +224,3 @@ Expected: Node reports v22 or newer; TypeScript build and all Vitest tests pass.
 Run: `git diff --stat origin/main...HEAD && git diff origin/main...HEAD`
 
 Expected: only the authority helper/tests/spec, event schema/tests/spec, TypeScript declarations/fixture/config, and this plan changed; no generated build output or docket metadata appears.
-
-- [ ] **Step 4: Commit any integration-only corrections**
-
-If Step 2 required code corrections, stage only those explicit paths and commit:
-
-```bash
-git commit -m "test: complete v0.1 contract verification" -- <explicit-paths>
-```
-
-If no corrections were needed, do not create an empty commit.
