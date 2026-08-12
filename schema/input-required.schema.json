@@ -1,0 +1,4 @@
+{
+ "$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://adp.dev/schema/input-required.schema.json","title":"InputRequired","type":"object","additionalProperties":false,"required":["delegationId","requestId","reason","question"],
+ "properties":{"delegationId":{"type":"string","minLength":1},"requestId":{"type":"string","minLength":1},"reason":{"type":"string","minLength":1},"question":{"type":"string","minLength":1},"inputSchema":{"type":["object","boolean"]},"deadline":{"type":"string","format":"date-time"},"defaultBehavior":{"type":"string"},"partialArtifacts":{"type":"array","items":{"$ref":"artifact.schema.json"}},"remainingBudget":{"type":"object","additionalProperties":{"type":"number","minimum":0}},"resumeToken":{"type":"string","minLength":16}}
+}

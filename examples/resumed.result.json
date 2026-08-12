@@ -1,0 +1,1 @@
+{"specVersion":"0.1","delegationId":"rate-limit-42","status":"completed","summary":"Resumed after caller approved clock injection.","output":{"changedFiles":["src/rate-limit.ts","test/rate-limit.test.ts"]},"acceptance":[{"criterionId":"tests","status":"passed","evaluator":"caller","message":"Caller reran npm test."}],"usage":{"totalTokens":10800,"wallClockMs":210000}}

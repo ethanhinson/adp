@@ -1,0 +1,5 @@
+{
+ "$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://adp.dev/schema/artifact.schema.json","title":"Artifact","type":"object","additionalProperties":false,"required":["id","kind","mediaType","uri","digest","size","producerDelegationId"],
+ "properties":{"id":{"type":"string","minLength":1},"kind":{"enum":["file","patch","test_report","structured_data","report","log","blob"]},"mediaType":{"type":"string","pattern":"^[^/]+/[^/]+$"},"uri":{"type":"string","format":"uri-reference"},"digest":{"type":"string","pattern":"^sha256:[a-f0-9]{64}$"},"size":{"type":"integer","minimum":0},"producerDelegationId":{"type":"string","minLength":1},"path":{"type":"string","minLength":1},"schema":{"type":["object","boolean"]},"metadata":{"$ref":"#/$defs/metadata"}},
+ "$defs":{"metadata":{"type":"object","additionalProperties":{"type":"string"}}}
+}

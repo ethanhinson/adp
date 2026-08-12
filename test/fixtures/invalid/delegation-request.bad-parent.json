@@ -1,0 +1,1 @@
+{"specVersion":"0.1","id":"child","parent":{"delegationId":"parent","depth":0},"objective":{"summary":"Bad lineage"},"authority":{"capabilities":[],"filesystem":{"read":[],"write":[]},"network":{"mode":"none"},"subprocess":{"allowed":false},"credentials":[],"sideEffects":[],"delegation":{"allowed":false,"maxDepth":0}}}

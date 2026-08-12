@@ -1,0 +1,1 @@
+{"capabilities":"shell","filesystem":{"read":[],"write":[]},"network":{"mode":"none"},"subprocess":{"allowed":false},"credentials":[],"sideEffects":[],"delegation":{"allowed":false,"maxDepth":0}}

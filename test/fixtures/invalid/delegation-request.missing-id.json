@@ -1,0 +1,1 @@
+{"specVersion":"0.1","objective":{"summary":"Missing ID"},"authority":{"capabilities":[],"filesystem":{"read":[],"write":[]},"network":{"mode":"none"},"subprocess":{"allowed":false},"credentials":[],"sideEffects":[],"delegation":{"allowed":false,"maxDepth":0}}}
