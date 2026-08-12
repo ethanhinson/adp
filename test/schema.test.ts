@@ -1,4 +1,71 @@
-import {describe,expect,it} from "vitest"; import {readFileSync,readdirSync} from "node:fs"; import {basename,join} from "node:path"; import {validate,type DocumentKind} from "../src/validate.js";
-const root=new URL("../",import.meta.url); const read=(p:string)=>JSON.parse(readFileSync(new URL(p,root),"utf8"));
-const exampleKinds:Record<string,DocumentKind>={"coding-task.request.json":"delegation-request","coding-task.result.json":"delegation-result","readonly-inspection.request.json":"delegation-request","input-required.event.json":"delegation-event","resumed.result.json":"delegation-result","nested-delegation.request.json":"delegation-request","worker-descriptor.json":"worker-descriptor"};
-describe("schemas",()=>{for(const [file,kind] of Object.entries(exampleKinds))it(`validates ${file}`,()=>expect(validate(kind,read(`examples/${file}`))).toMatchObject({valid:true}));it("valid fixtures pass",()=>{for(const f of readdirSync(new URL("test/fixtures/valid",root)))expect(validate(f.split(".")[0] as DocumentKind,read(`test/fixtures/valid/${f}`)),basename(f)).toMatchObject({valid:true})});it("invalid fixtures fail",()=>{for(const f of readdirSync(new URL("test/fixtures/invalid",root)))expect(validate(f.split(".")[0] as DocumentKind,read(`test/fixtures/invalid/${f}`)),basename(f)).toMatchObject({valid:false})});it("requires terminal event kinds to match result status",()=>{for(const status of ["completed","partial","failed","cancelled","budget_exhausted","rejected"] as const){const event={specVersion:"0.1",delegationId:"d1",sequence:1,time:"2026-08-12T00:00:00Z",kind:status,result:{specVersion:"0.1",delegationId:"d1",status}};expect(validate("delegation-event",event).valid).toBe(true);expect(validate("delegation-event",{...event,result:{...event.result,status:status === "failed" ? "completed" : "failed"}}).valid).toBe(false)}})});
+import { describe, expect, it } from "vitest";
+import { readFileSync, readdirSync } from "node:fs";
+import { basename, join } from "node:path";
+import { validate, type DocumentKind } from "../src/validate.js";
+const root = new URL("../", import.meta.url);
+const read = (p: string) => JSON.parse(readFileSync(new URL(p, root), "utf8"));
+const exampleKinds: Record<string, DocumentKind> = {
+  "coding-task.request.json": "delegation-request",
+  "coding-task.result.json": "delegation-result",
+  "readonly-inspection.request.json": "delegation-request",
+  "input-required.event.json": "delegation-event",
+  "resumed.result.json": "delegation-result",
+  "nested-delegation.request.json": "delegation-request",
+  "worker-descriptor.json": "worker-descriptor",
+};
+describe("schemas", () => {
+  for (const [file, kind] of Object.entries(exampleKinds))
+    it(`validates ${file}`, () =>
+      expect(validate(kind, read(`examples/${file}`))).toMatchObject({
+        valid: true,
+      }));
+  it("valid fixtures pass", () => {
+    for (const f of readdirSync(new URL("test/fixtures/valid", root)))
+      expect(
+        validate(
+          f.split(".")[0] as DocumentKind,
+          read(`test/fixtures/valid/${f}`),
+        ),
+        basename(f),
+      ).toMatchObject({ valid: true });
+  });
+  it("invalid fixtures fail", () => {
+    for (const f of readdirSync(new URL("test/fixtures/invalid", root)))
+      expect(
+        validate(
+          f.split(".")[0] as DocumentKind,
+          read(`test/fixtures/invalid/${f}`),
+        ),
+        basename(f),
+      ).toMatchObject({ valid: false });
+  });
+  it("requires terminal event kinds to match result status", () => {
+    for (const status of [
+      "completed",
+      "partial",
+      "failed",
+      "cancelled",
+      "budget_exhausted",
+      "rejected",
+    ] as const) {
+      const event = {
+        specVersion: "0.1",
+        delegationId: "d1",
+        sequence: 1,
+        time: "2026-08-12T00:00:00Z",
+        kind: status,
+        result: { specVersion: "0.1", delegationId: "d1", status },
+      };
+      expect(validate("delegation-event", event).valid).toBe(true);
+      expect(
+        validate("delegation-event", {
+          ...event,
+          result: {
+            ...event.result,
+            status: status === "failed" ? "completed" : "failed",
+          },
+        }).valid,
+      ).toBe(false);
+    }
+  });
+});

@@ -1,5 +1,7 @@
 <!-- docket:backlink:start (generated — do not hand-edit) -->
+
 > ↩ **[Change 0001 — Correct v0.1 authority and event contract consistency](https://github.com/ethanhinson/adp/blob/docket/docs/changes/active/0001-correct-v0-1-contract-consistency.md)**
+
 <!-- docket:backlink:end -->
 
 # Correct v0.1 authority and event contract consistency — results

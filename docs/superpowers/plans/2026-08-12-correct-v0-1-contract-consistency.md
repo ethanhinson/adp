@@ -1,5 +1,7 @@
 <!-- docket:backlink:start (generated — do not hand-edit) -->
+
 > ↩ **[Change 0001 — Correct v0.1 authority and event contract consistency](https://github.com/ethanhinson/adp/blob/docket/docs/changes/active/0001-correct-v0-1-contract-consistency.md)**
+
 <!-- docket:backlink:end -->
 
 # Correct v0.1 Contract Consistency Implementation Plan
@@ -24,11 +26,13 @@
 ### Task 1: Make authority intersection monotonic and order-independent
 
 **Files:**
+
 - Modify: `test/authority.test.ts`
 - Modify: `src/authority.ts`
 - Modify: `spec/04-authority.md`
 
 **Interfaces:**
+
 - Consumes: `Authority`, `CredentialGrant`, and `NetworkAuthority` from `src/types.ts`.
 - Produces: unchanged `intersectAuthority(parent, grant, runtimePolicy, workerMaximum): Authority` and `isAuthoritySubset(child, parent): boolean` APIs with corrected filesystem, credential, and approval semantics.
 
@@ -37,28 +41,39 @@
 Add focused Vitest cases that assert:
 
 ```ts
-expect(intersectAuthority(
-  auth({filesystem:{read:["/repo"],write:["/repo"]}}),
-  auth({filesystem:{read:["/repo/src"],write:["/repo/src"]}}),
-  auth(), auth()
-).filesystem).toEqual({read:["/repo/src"],write:["/repo/src"]});
+expect(
+  intersectAuthority(
+    auth({ filesystem: { read: ["/repo"], write: ["/repo"] } }),
+    auth({ filesystem: { read: ["/repo/src"], write: ["/repo/src"] } }),
+    auth(),
+    auth(),
+  ).filesystem,
+).toEqual({ read: ["/repo/src"], write: ["/repo/src"] });
 
-expect(intersectAuthority(
-  auth({credentials:[{handle:"secret:a"}]}),
-  auth({credentials:[{handle:"secret:a",scopes:["read","write"]}]}),
-  auth({credentials:[{handle:"secret:a",scopes:["read"]}]}),
-  auth({credentials:[{handle:"secret:a"}]})
-).credentials).toEqual([{handle:"secret:a",scopes:["read"]}]);
+expect(
+  intersectAuthority(
+    auth({ credentials: [{ handle: "secret:a" }] }),
+    auth({ credentials: [{ handle: "secret:a", scopes: ["read", "write"] }] }),
+    auth({ credentials: [{ handle: "secret:a", scopes: ["read"] }] }),
+    auth({ credentials: [{ handle: "secret:a" }] }),
+  ).credentials,
+).toEqual([{ handle: "secret:a", scopes: ["read"] }]);
 
-expect(intersectAuthority(
-  auth({approvals:[{action:"deploy",required:true}]}),
-  auth({approvals:[]}), auth(), auth()
-).approvals).toEqual([{action:"deploy",required:true}]);
+expect(
+  intersectAuthority(
+    auth({ approvals: [{ action: "deploy", required: true }] }),
+    auth({ approvals: [] }),
+    auth(),
+    auth(),
+  ).approvals,
+).toEqual([{ action: "deploy", required: true }]);
 
-expect(isAuthoritySubset(
-  auth({approvals:[]}),
-  auth({approvals:[{action:"deploy",required:true}]})
-)).toBe(false);
+expect(
+  isAuthoritySubset(
+    auth({ approvals: [] }),
+    auth({ approvals: [{ action: "deploy", required: true }] }),
+  ),
+).toBe(false);
 ```
 
 Also cover reversed filesystem input order, redundant descendant removal, empty explicit scope intersection removing a credential, unrestricted scopes when all sources omit them, and stricter child approvals being allowed.
@@ -100,11 +115,13 @@ git commit -m "fix: make authority intersection monotonic"
 ### Task 2: Enforce terminal event/result agreement
 
 **Files:**
+
 - Modify: `schema/delegation-event.schema.json`
 - Modify: `test/schema.test.ts`
 - Modify: `spec/03-lifecycle.md`
 
 **Interfaces:**
+
 - Consumes: the existing `delegation-result.schema.json` reference and terminal kinds `completed | partial | failed | cancelled | budget_exhausted | rejected`.
 - Produces: a `DelegationEvent` schema whose terminal `kind` requires `result.status` to be the same literal status.
 
@@ -113,10 +130,32 @@ git commit -m "fix: make authority intersection monotonic"
 In `test/schema.test.ts`, compile the event schema through the existing validator setup and add a table-driven test over all six terminal statuses. For each status, validate a complete event whose `kind` and `result.status` match, then change `result.status` to a different terminal value and assert rejection:
 
 ```ts
-for (const status of ["completed","partial","failed","cancelled","budget_exhausted","rejected"] as const) {
-  const event = {specVersion:"0.1",delegationId:"d1",sequence:1,time:"2026-08-12T00:00:00Z",kind:status,result:{specVersion:"0.1",delegationId:"d1",status}};
+for (const status of [
+  "completed",
+  "partial",
+  "failed",
+  "cancelled",
+  "budget_exhausted",
+  "rejected",
+] as const) {
+  const event = {
+    specVersion: "0.1",
+    delegationId: "d1",
+    sequence: 1,
+    time: "2026-08-12T00:00:00Z",
+    kind: status,
+    result: { specVersion: "0.1", delegationId: "d1", status },
+  };
   expect(validate("delegation-event.schema.json", event).valid).toBe(true);
-  expect(validate("delegation-event.schema.json", {...event,result:{...event.result,status:status === "failed" ? "completed" : "failed"}}).valid).toBe(false);
+  expect(
+    validate("delegation-event.schema.json", {
+      ...event,
+      result: {
+        ...event.result,
+        status: status === "failed" ? "completed" : "failed",
+      },
+    }).valid,
+  ).toBe(false);
 }
 ```
 
@@ -158,11 +197,13 @@ git commit -m "fix: bind terminal events to result status"
 ### Task 3: Align exported TypeScript declarations to the schemas
 
 **Files:**
+
 - Modify: `src/types.ts`
 - Create: `test/types.fixture.ts`
 - Modify: `tsconfig.json`
 
 **Interfaces:**
+
 - Consumes: all published JSON Schemas under `schema/`.
 - Produces: precise exported structures for JSON Schema values, artifact kinds/specs, context, constraints, budgets, scheduling, usage, diagnostics, workspaces, and complete worker descriptors while retaining the existing top-level exported names.
 
@@ -184,10 +225,28 @@ In `src/types.ts`, add and use named structures equivalent to the canonical sche
 
 ```ts
 export type JsonSchema = Record<string, unknown> | boolean;
-export type ArtifactKind = "file" | "patch" | "test_report" | "structured_data" | "report" | "log" | "blob";
+export type ArtifactKind =
+  | "file"
+  | "patch"
+  | "test_report"
+  | "structured_data"
+  | "report"
+  | "log"
+  | "blob";
 export type Evaluator = "worker" | "caller" | "external" | "human";
-export type WorkspaceMode = "shared" | "read_only" | "worktree" | "sandbox" | "remote";
-export type BudgetDimension = "cost" | "inputTokens" | "outputTokens" | "totalTokens" | "wallClockMs" | "childDelegations";
+export type WorkspaceMode =
+  | "shared"
+  | "read_only"
+  | "worktree"
+  | "sandbox"
+  | "remote";
+export type BudgetDimension =
+  | "cost"
+  | "inputTokens"
+  | "outputTokens"
+  | "totalTokens"
+  | "wallClockMs"
+  | "childDelegations";
 ```
 
 Model `ContextEntry`, `Constraints`, `Budget`, `ArtifactSpec`, `Scheduling`, `Usage`, `Diagnostic`, `WorkspaceEnvironment`, `WorkspaceRetention`, `WorkerFeatures`, `WorkerModel`, and `WorkerCapacity` with exactly the published property names. Change schema-valued fields to `JsonSchema`; narrow artifact kinds/evaluators/workspace modes; and add all missing worker descriptor fields. Do not encode JSON Schema numeric/string format constraints as branded TypeScript types.
